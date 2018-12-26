@@ -114,8 +114,8 @@ namespace Minesweeper
 
         private void AdjustWindowSize(int x, int y)
         {
-            Width = x * 20 + 45;
-            Height = y * 20 + 144;
+            Width = x * 20 + 46;
+            Height = y * 20 + 145;
         }
 
         private void MarkWrongCells()
@@ -218,10 +218,10 @@ namespace Minesweeper
             {
                 while (true)
                 {
+                    await Task.Delay(1000, _timerCancellationSource.Token);
+
                     _secondsElapsed++;
                     Time = _secondsElapsed.ToString("000");
-
-                    await Task.Delay(1000, _timerCancellationSource.Token);
                 }
             }
             catch { }

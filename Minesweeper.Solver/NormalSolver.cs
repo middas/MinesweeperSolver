@@ -2,20 +2,30 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Minesweeper.Solver
 {
     public class NormalSolver : ISolver
     {
-        public void Solve(Game.Minesweeper minesweeper)
+        public Task Solve(Game.Minesweeper minesweeper)
         {
-            Random random = new Random();
-
-            while (minesweeper.GameStatus != GameStatus.Win && minesweeper.GameStatus != GameStatus.Loss)
+            return Task.Run(() =>
             {
-                RevealRandomCell(minesweeper, random);
-                MarkMines(minesweeper);
-            }
+                Random random = new Random();
+
+                while (minesweeper.GameStatus != GameStatus.Win && minesweeper.GameStatus != GameStatus.Loss)
+                {
+                    if (!MarkMines(minesweeper))
+                    {
+                        RevealRandomCell(minesweeper, random);
+                    }
+                    else
+                    {
+                        RevealCellsAroundMines(minesweeper);
+                    }
+                }
+            });
         }
 
         private IEnumerable<(int x, int y)> GetAvailableGameCellLocations(Game.Minesweeper minesweeper)
@@ -28,20 +38,60 @@ namespace Minesweeper.Solver
             return minesweeper.GameBoard.Where(gc => !gc.IsFlagged && !gc.IsRevealed);
         }
 
-        private void MarkMines(Game.Minesweeper minesweeper)
+        private bool MarkMines(Game.Minesweeper minesweeper)
         {
-            // this is broken
+            bool minesFound = false;
+
             for (int i = 1; i <= 8; i++)
             {
                 foreach (var revealedCell in minesweeper.GameBoard.Where(gc => gc.IsRevealed && gc.AdjacentMines == i))
                 {
                     var unrevealedAdjCells = minesweeper.GameBoard.GetAdjacentCells(revealedCell).Where(gc => !gc.IsRevealed);
-                    if (unrevealedAdjCells.Count() - minesweeper.GameBoard.GetAdjacentCells(revealedCell).Where(gc => gc.IsFlagged).Count() == i)
+                    int flagCount = unrevealedAdjCells.Count(gc => gc.IsFlagged);
+                    int remainingMines = revealedCell.AdjacentMines - flagCount;
+
+                    if (unrevealedAdjCells.Count(gc => !gc.IsFlagged) == remainingMines)
                     {
                         foreach (var cell in unrevealedAdjCells.Where(gc => !gc.IsFlagged))
                         {
                             minesweeper.BoardClick(cell.X, cell.Y, ClickAction.Flag);
+                            minesFound = true;
                         }
+                    }
+                }
+            }
+
+            return minesFound;
+        }
+
+        private void RevealCellsAroundMines(Game.Minesweeper minesweeper)
+        {
+            var flaggedCells = minesweeper.GameBoard.Where(gc => gc.IsFlagged);
+
+            foreach (var flaggedCell in flaggedCells)
+            {
+                foreach (var cell in minesweeper.GameBoard.GetAdjacentCells(flaggedCell).Where(gc => gc.IsRevealed))
+                {
+                    RevealIfConditionMet(cell, minesweeper);
+                }
+            }
+        }
+
+        private void RevealIfConditionMet(GameCell cell, Game.Minesweeper minesweeper)
+        {
+            if (cell.AdjacentMines != 0)
+            {
+                var unrevealedAdjCells = minesweeper.GameBoard.GetAdjacentCells(cell).Where(gc => !gc.IsRevealed);
+                int flagCount = unrevealedAdjCells.Count(gc => gc.IsFlagged);
+                int remainingMines = cell.AdjacentMines - flagCount;
+
+                if (remainingMines == 0)
+                {
+                    foreach (var unrevealedCell in unrevealedAdjCells.Where(gc => !gc.IsFlagged))
+                    {
+                        minesweeper.BoardClick(unrevealedCell.X, unrevealedCell.Y, ClickAction.Reveal);
+
+                        RevealIfConditionMet(unrevealedCell, minesweeper);
                     }
                 }
             }

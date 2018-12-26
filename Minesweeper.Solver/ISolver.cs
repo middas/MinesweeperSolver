@@ -1,10 +1,11 @@
 ﻿using Minesweeper.Game;
 using System;
+using System.Threading.Tasks;
 
 namespace Minesweeper.Solver
 {
     public interface ISolver
     {
-        void Solve(Game.Minesweeper minesweeper);
+        Task Solve(Game.Minesweeper minesweeper);
     }
 }
