@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.168
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Minesweeper", "MinesweeperSolver\Minesweeper.csproj", "{043567AB-8587-4193-BEDD-269B92669D9B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Minesweeper.Game", "Minesweeper.Game\Minesweeper.Game.csproj", "{C800E3F6-AEB8-4CA6-842E-E3839CEB61BB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Minesweeper.Game", "Minesweeper.Game\Minesweeper.Game.csproj", "{C800E3F6-AEB8-4CA6-842E-E3839CEB61BB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Minesweeper", "Minesweeper\Minesweeper.csproj", "{043567AB-8587-4193-BEDD-269B92669D9B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,14 +13,14 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{043567AB-8587-4193-BEDD-269B92669D9B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{043567AB-8587-4193-BEDD-269B92669D9B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{043567AB-8587-4193-BEDD-269B92669D9B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{043567AB-8587-4193-BEDD-269B92669D9B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C800E3F6-AEB8-4CA6-842E-E3839CEB61BB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{C800E3F6-AEB8-4CA6-842E-E3839CEB61BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C800E3F6-AEB8-4CA6-842E-E3839CEB61BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C800E3F6-AEB8-4CA6-842E-E3839CEB61BB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{043567AB-8587-4193-BEDD-269B92669D9B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{043567AB-8587-4193-BEDD-269B92669D9B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{043567AB-8587-4193-BEDD-269B92669D9B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{043567AB-8587-4193-BEDD-269B92669D9B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
