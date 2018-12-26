@@ -32,8 +32,6 @@ namespace Minesweeper.Game
             }
         }
 
-        public bool IsMine { get; set; }
-
         public bool IsRevealed
         {
             get => _isRevealed;
@@ -49,5 +47,7 @@ namespace Minesweeper.Game
         public int X { get; private set; }
 
         public int Y { get; private set; }
+
+        internal bool IsMine { get; set; }
     }
 }

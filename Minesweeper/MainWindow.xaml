@@ -50,9 +50,9 @@
                             <ListView.ItemTemplate>
                                 <DataTemplate>
                                     <local:GameCellUI IsRevealed="{Binding IsRevealed}" IsFlagged="{Binding IsFlagged}" 
-                                                      HasNumber="{Binding HasNumber}" IsMine="{Binding IsMine}" 
-                                                      Command="{Binding LeftClickCommand}" RightCommand="{Binding RightClickCommand}"
-                                                      MineVisible="{Binding MineVisible}" IsWrong="{Binding IsWrong}"/>
+                                                      HasNumber="{Binding HasNumber}" Command="{Binding LeftClickCommand}"
+                                                      RightCommand="{Binding RightClickCommand}" MineVisible="{Binding MineVisible}" 
+                                                      IsWrong="{Binding IsWrong}" IsMine="{Binding IsMine}"/>
                                 </DataTemplate>
                             </ListView.ItemTemplate>
                             <ListView.ItemContainerStyle>

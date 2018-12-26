@@ -19,6 +19,8 @@ namespace Minesweeper
         public GameCellViewModel(GameCell gameCell)
         {
             _gameCell = gameCell;
+            X = _gameCell.X;
+            Y = _gameCell.Y;
 
             _gameCell.RevealChanged += (s, e) => IsRevealed = ((GameCell)s).IsRevealed;
             _gameCell.FlagChanged += (s, e) => IsFlagged = ((GameCell)s).IsFlagged;
@@ -85,7 +87,6 @@ namespace Minesweeper
                 _isRevealed = value;
 
                 NotifyPropertyChanged(nameof(IsRevealed));
-                OnIsRevealedChanged();
             }
         }
 
@@ -117,10 +118,13 @@ namespace Minesweeper
 
         public ICommand RightClickCommand => new RelayCommand(RightClicked);
 
+        public int X { get; private set; }
+
+        public int Y { get; private set; }
+
         public void UpdateValues()
         {
             IsFlagged = _gameCell.IsFlagged;
-            IsMine = _gameCell.IsMine;
             IsRevealed = _gameCell.IsRevealed;
             AdjacentMines = _gameCell.AdjacentMines;
             HasNumber = _gameCell.AdjacentMines > 0;
@@ -134,14 +138,6 @@ namespace Minesweeper
         private void NotifyPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
-        private void OnIsRevealedChanged()
-        {
-            if (IsRevealed)
-            {
-                MineVisible = IsMine;
-            }
         }
 
         private void RightClicked()

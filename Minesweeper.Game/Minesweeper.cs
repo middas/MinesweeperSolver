@@ -86,6 +86,16 @@ namespace Minesweeper.Game
             }
         }
 
+        public (int x, int y)[] GetMineLocations()
+        {
+            if (GameStatus != GameStatus.Loss)
+            {
+                throw new Exception("Cannot get mine locations until the game is lost.");
+            }
+
+            return GameBoard.Where(gc => gc.IsMine).Select(gc => (gc.X, gc.Y)).ToArray();
+        }
+
         public void NewGame(int x, int y, int mineCount)
         {
             GameBoard.PopulateBoard(x, y, mineCount);

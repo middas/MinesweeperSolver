@@ -189,7 +189,19 @@ namespace Minesweeper
             {
                 StopTimer();
 
-                MarkWrongCells();
+                if (_gameStatus == GameStatus.Loss)
+                {
+                    var mineCells = _minesweeperGame.GetMineLocations();
+
+                    foreach (var (x, y) in mineCells)
+                    {
+                        var cell = GameCells.Single(gc => gc.X == x && gc.Y == y);
+                        cell.IsMine = true;
+                        cell.MineVisible = !cell.IsFlagged;
+                    }
+
+                    MarkWrongCells();
+                }
             }
         }
 
