@@ -1,0 +1,48 @@
+﻿<UserControl x:Class="Minesweeper.GameCellUI"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:Minesweeper"
+             xmlns:converters="clr-namespace:Minesweeper.Converters"
+             mc:Ignorable="d"
+             Height="20" Width="20" Padding="0" Margin="0" x:Name="uc">
+    <Grid>
+        <Grid.Resources>
+            <converters:BooleanToVisibilityConverter Negate="True" x:Key="BooleanToVisibilityNegationConverter" />
+            <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        </Grid.Resources>
+        <Button Command="{Binding ElementName=uc, Path=Command}" Visibility="{Binding ElementName=uc, Path=IsRevealed, Converter={StaticResource BooleanToVisibilityNegationConverter}}">
+            <Button.InputBindings>
+                <MouseBinding Gesture="RightClick" Command="{Binding ElementName=uc, Path=RightCommand}" />
+            </Button.InputBindings>
+        </Button>
+
+        <Border Visibility="{Binding ElementName=uc, Path=IsFlagged, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <Grid>
+                <Image HorizontalAlignment="Center" VerticalAlignment="Center" Source="{StaticResource FlagImage}">
+                    <Image.InputBindings>
+                        <MouseBinding Gesture="RightClick" Command="{Binding ElementName=uc, Path=RightCommand}" />
+                    </Image.InputBindings>
+                </Image>
+                <Image Visibility="{Binding IsWrong, Converter={StaticResource BooleanToVisibilityConverter}}" HorizontalAlignment="Center" VerticalAlignment="Center" Source="{StaticResource WrongImage}" />
+            </Grid>
+        </Border>
+
+        <Border Background="DarkGray" BorderThickness="1" Visibility="{Binding ElementName=uc, Path=IsRevealed, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <Border.BorderBrush>
+                <VisualBrush>
+                    <VisualBrush.Visual>
+                        <Rectangle StrokeDashArray="4 2" Stroke="#111111" StrokeThickness="1"
+                                   Width="{Binding RelativeSource={RelativeSource AncestorType={x:Type Border}}, Path=ActualWidth}"
+                                   Height="{Binding RelativeSource={RelativeSource AncestorType={x:Type Border}}, Path=ActualHeight}" />
+                    </VisualBrush.Visual>
+                </VisualBrush>
+            </Border.BorderBrush>
+            <Grid>
+                <TextBlock Foreground="Blue" Text="{Binding AdjacentMines}" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16" Visibility="{Binding ElementName=uc, Path=HasNumber, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                <Image Visibility="{Binding ElementName=uc, Path=MineVisible, Converter={StaticResource BooleanToVisibilityConverter}}" Source="{StaticResource MineImage}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>

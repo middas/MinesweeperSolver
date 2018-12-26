@@ -1,0 +1,71 @@
+﻿<Window x:Class="Minesweeper.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Minesweeper"
+        xmlns:converters="clr-namespace:Minesweeper.Converters"
+        mc:Ignorable="d"
+        Title="Minesweeper" Height="{Binding Height, Mode=TwoWay}" Width="{Binding Width, Mode=TwoWay}" Background="{x:Static SystemColors.WindowBrush}" ResizeMode="CanMinimize">
+    <Window.DataContext>
+        <local:MainWindowViewModel/>
+    </Window.DataContext>
+    <DockPanel>
+        <Border Margin="5" DockPanel.Dock="Top" BorderBrush="{x:Static SystemColors.ControlLightBrush}" BorderThickness="0 0 3 3">
+            <Border BorderBrush="{x:Static SystemColors.ControlDarkBrush}" BorderThickness="3 3 0 0">
+                <Grid Height="50" Margin="5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Text="{Binding MineCount}" Width="65" Background="DarkGray" Foreground="Lime" FontSize="36" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Lucida Sans Typewriter"/>
+
+                    <Grid Grid.Column="1">
+                        <Button Command="{Binding NewGameCommand}" HorizontalAlignment="Center" Height="20" Width="20" Padding="2 0">
+                            <Button.Resources>
+                                <converters:GameStatusToImageConverter x:Key="gameStatusConverter"/>
+                            </Button.Resources>
+                            <Button.Content>
+                                <Image Source="{Binding GameStatus, Converter={StaticResource gameStatusConverter}}" />
+                            </Button.Content>
+                        </Button>
+                    </Grid>
+
+                    <TextBlock Grid.Column="2" Text="{Binding Time}" Width="65" Background="DarkGray" Foreground="Lime" FontSize="36" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Lucida Sans Typewriter"/>
+                </Grid>
+            </Border>
+        </Border>
+        <Grid DockPanel.Dock="Bottom">
+            <Border Margin="5" DockPanel.Dock="Top" BorderBrush="{x:Static SystemColors.ControlLightBrush}" BorderThickness="0 0 3 3">
+                <Border BorderBrush="{x:Static SystemColors.ControlDarkBrush}" BorderThickness="3 3 0 0">
+                    <Grid Margin="5">
+                        <ListView ScrollViewer.HorizontalScrollBarVisibility="Disabled" Background="#DFDFDF" ItemsSource="{Binding GameCells}">
+                            <ListView.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapPanel Orientation="Horizontal" Margin="0"/>
+                                </ItemsPanelTemplate>
+                            </ListView.ItemsPanel>
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <local:GameCellUI IsRevealed="{Binding IsRevealed}" IsFlagged="{Binding IsFlagged}" 
+                                                      HasNumber="{Binding HasNumber}" IsMine="{Binding IsMine}" 
+                                                      Command="{Binding LeftClickCommand}" RightCommand="{Binding RightClickCommand}"
+                                                      MineVisible="{Binding MineVisible}" IsWrong="{Binding IsWrong}"/>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                            <ListView.ItemContainerStyle>
+                                <Style TargetType="{x:Type ListViewItem}">
+                                    <Setter Property="Margin" Value="0"/>
+                                    <Setter Property="Padding" Value="0"/>
+                                    <Setter Property="BorderThickness" Value="0"/>
+                                </Style>
+                            </ListView.ItemContainerStyle>
+                        </ListView>
+                    </Grid>
+                </Border>
+            </Border>
+        </Grid>
+    </DockPanel>
+</Window>
