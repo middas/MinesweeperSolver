@@ -1,4 +1,5 @@
 ﻿using Minesweeper.Game;
+using Minesweeper.Solver;
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -85,6 +86,8 @@ namespace Minesweeper
 
         public ICommand NewGameCommand => new RelayCommand(NewGame);
 
+        public ICommand SolveCommand => new RelayCommand(Solve);
+
         public string Time
         {
             get => _time;
@@ -123,19 +126,11 @@ namespace Minesweeper
             }
         }
 
-        private void MinesPlaced(object sender, EventArgs e)
-        {
-            foreach (var c in GameCells)
-            {
-                c.UpdateValues();
-            }
-        }
-
         private void NewGame()
         {
             if (_minesweeperGame != null)
             {
-                _minesweeperGame.MinesPlaced -= MinesPlaced;
+                _minesweeperGame.Dispose();
             }
 
             StopTimer();
@@ -144,7 +139,15 @@ namespace Minesweeper
             Time = "000";
 
             _minesweeperGame = new Game.Minesweeper();
-            _minesweeperGame.MinesPlaced += MinesPlaced;
+            _minesweeperGame.MinesPlaced += (s, e) =>
+            {
+                foreach (var c in GameCells)
+                {
+                    c.UpdateValues();
+                }
+            };
+            _minesweeperGame.GameStatusChanged += (s, e) => GameStatus = ((Game.Minesweeper)s).GameStatus;
+            _minesweeperGame.RemainingMinesChanged += (s, e) => MineCount = ((Game.Minesweeper)s).RemainingMines.ToString("000");
             _minesweeperGame.NewGame(Expert.x, Expert.y, Expert.mines);
 
             GameCells = new ObservableCollection<GameCellViewModel>(_minesweeperGame.GameBoard.OrderBy(c => c.X).ThenBy(c => c.Y).Select(c => new GameCellViewModel(c)));
@@ -155,20 +158,12 @@ namespace Minesweeper
                 {
                     if (GameStatus == GameStatus.New)
                     {
-                        _timerCancellationSource = new CancellationTokenSource();
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-                        StartTimer(_timerCancellationSource.Token);
+                        StartTimer();
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
                     }
 
                     _minesweeperGame.BoardClick(e.X, e.Y, e.ClickAction);
-
-                    if (e.ClickAction == ClickAction.Flag)
-                    {
-                        MineCount = _minesweeperGame.RemainingMines.ToString("000");
-                    }
-
-                    GameStatus = _minesweeperGame.GameStatus;
                 };
             }
 
@@ -205,8 +200,20 @@ namespace Minesweeper
             }
         }
 
-        private async Task StartTimer(CancellationToken cancellationToken)
+        private void Solve()
         {
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+            StartTimer();
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+
+            ISolver solver = new NormalSolver();
+            solver.Solve(_minesweeperGame);
+        }
+
+        private async Task StartTimer()
+        {
+            _timerCancellationSource = new CancellationTokenSource();
+
             try
             {
                 while (true)
@@ -214,7 +221,7 @@ namespace Minesweeper
                     _secondsElapsed++;
                     Time = _secondsElapsed.ToString("000");
 
-                    await Task.Delay(1000, cancellationToken);
+                    await Task.Delay(1000, _timerCancellationSource.Token);
                 }
             }
             catch { }

@@ -61,6 +61,22 @@ namespace Minesweeper.Game
             CalculateAdjacentMineValues();
         }
 
+        public IEnumerable<GameCell> GetAdjacentCells(GameCell gameCell)
+        {
+            for (int x = Math.Max(0, gameCell.X - 1); x <= Math.Min(X - 1, gameCell.X + 1); x++)
+            {
+                for (int y = Math.Max(0, gameCell.Y - 1); y <= Math.Min(Y - 1, gameCell.Y + 1); y++)
+                {
+                    if (x == gameCell.X && y == gameCell.Y)
+                    {
+                        continue;
+                    }
+
+                    yield return _Grid[x, y];
+                }
+            }
+        }
+
         public IEnumerator<GameCell> GetEnumerator()
         {
             return _Grid.Cast<GameCell>().GetEnumerator();
@@ -91,12 +107,9 @@ namespace Minesweeper.Game
                     if (_Grid[x, y].IsMine)
                     {
                         // increment all adjacent cell counts
-                        for (int ax = Math.Max(0, x - 1); ax <= Math.Min(X - 1, x + 1); ax++)
+                        foreach (var cell in GetAdjacentCells(_Grid[x, y]))
                         {
-                            for (int ay = Math.Max(0, y - 1); ay <= Math.Min(Y - 1, y + 1); ay++)
-                            {
-                                _Grid[ax, ay].AdjacentMines++;
-                            }
+                            cell.AdjacentMines++;
                         }
                     }
                 }

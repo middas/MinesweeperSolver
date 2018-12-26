@@ -17,9 +17,11 @@ namespace Minesweeper.Game
         Loss
     }
 
-    public class Minesweeper
+    public class Minesweeper : IDisposable
     {
         private bool _firstClick;
+        private GameStatus _gameStatus;
+        private int _remainingMines;
 
         public Minesweeper()
         {
@@ -27,13 +29,36 @@ namespace Minesweeper.Game
             GameStatus = GameStatus.New;
         }
 
+        public event EventHandler GameStatusChanged;
+
         public event EventHandler MinesPlaced;
+
+        public event EventHandler RemainingMinesChanged;
 
         public GameBoard GameBoard { get; private set; }
 
-        public GameStatus GameStatus { get; private set; }
+        public GameStatus GameStatus
+        {
+            get => _gameStatus;
 
-        public int RemainingMines { get; private set; }
+            private set
+            {
+                _gameStatus = value;
+
+                GameStatusChanged?.Invoke(this, EventArgs.Empty);
+            }
+        }
+
+        public int RemainingMines
+        {
+            get => _remainingMines; private set
+
+            {
+                _remainingMines = value;
+
+                RemainingMinesChanged?.Invoke(this, EventArgs.Empty);
+            }
+        }
 
         public void BoardClick(int x, int y, ClickAction clickAction)
         {
@@ -86,6 +111,14 @@ namespace Minesweeper.Game
             }
         }
 
+        public void Dispose()
+        {
+            GameStatusChanged = null;
+            MinesPlaced = null;
+            RemainingMinesChanged = null;
+            GameBoard = null;
+        }
+
         public (int x, int y)[] GetMineLocations()
         {
             if (GameStatus != GameStatus.Loss)
@@ -110,15 +143,11 @@ namespace Minesweeper.Game
 
             if (cell.AdjacentMines == 0)
             {
-                for (int x = Math.Max(0, cell.X - 1); x <= Math.Min(cell.X + 1, GameBoard.X - 1); x++)
+                foreach (var adjCell in GameBoard.GetAdjacentCells(cell))
                 {
-                    for (int y = Math.Max(0, cell.Y - 1); y <= Math.Min(cell.Y + 1, GameBoard.Y - 1); y++)
+                    if (!adjCell.IsRevealed)
                     {
-                        var adjCell = GameBoard[x, y];
-                        if (!adjCell.IsRevealed)
-                        {
-                            RevealCell(adjCell);
-                        }
+                        RevealCell(adjCell);
                     }
                 }
             }

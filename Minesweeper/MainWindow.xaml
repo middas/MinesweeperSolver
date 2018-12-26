@@ -30,6 +30,9 @@
                             <Button.Content>
                                 <Image Source="{Binding GameStatus, Converter={StaticResource gameStatusConverter}}" />
                             </Button.Content>
+                            <Button.InputBindings>
+                                <MouseBinding Gesture="RightClick" Command="{Binding SolveCommand}" />
+                            </Button.InputBindings>
                         </Button>
                     </Grid>
 

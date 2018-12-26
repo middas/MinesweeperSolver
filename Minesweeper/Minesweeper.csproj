@@ -140,6 +140,10 @@
       <Project>{c800e3f6-aeb8-4ca6-842e-e3839ceb61bb}</Project>
       <Name>Minesweeper.Game</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Minesweeper.Solver\Minesweeper.Solver.csproj">
+      <Project>{1436e37e-8f51-4b22-921c-b690f4351d9d}</Project>
+      <Name>Minesweeper.Solver</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Flag.png" />
