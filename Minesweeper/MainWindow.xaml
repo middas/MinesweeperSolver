@@ -8,24 +8,24 @@
         mc:Ignorable="d"
         Title="Minesweeper" Height="{Binding Height, Mode=TwoWay}" Width="{Binding Width, Mode=TwoWay}" Background="{x:Static SystemColors.WindowBrush}" ResizeMode="CanMinimize">
     <Window.DataContext>
-        <local:MainWindowViewModel/>
+        <local:MainWindowViewModel />
     </Window.DataContext>
     <DockPanel>
         <Border Margin="5" DockPanel.Dock="Top" BorderBrush="{x:Static SystemColors.ControlLightBrush}" BorderThickness="0 0 3 3">
             <Border BorderBrush="{x:Static SystemColors.ControlDarkBrush}" BorderThickness="3 3 0 0">
                 <Grid Height="50" Margin="5">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition/>
-                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition />
+                        <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
 
-                    <TextBlock Text="{Binding MineCount}" Width="65" Background="DarkGray" Foreground="Lime" FontSize="36" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Lucida Sans Typewriter"/>
+                    <TextBlock Text="{Binding MineCount}" Width="65" Background="DarkGray" Foreground="Lime" FontSize="36" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Lucida Sans Typewriter" />
 
                     <Grid Grid.Column="1">
                         <Button Command="{Binding NewGameCommand}" HorizontalAlignment="Center" Height="20" Width="20" Padding="2 0">
                             <Button.Resources>
-                                <converters:GameStatusToImageConverter x:Key="gameStatusConverter"/>
+                                <converters:GameStatusToImageConverter x:Key="gameStatusConverter" />
                             </Button.Resources>
                             <Button.Content>
                                 <Image Source="{Binding GameStatus, Converter={StaticResource gameStatusConverter}}" />
@@ -36,7 +36,7 @@
                         </Button>
                     </Grid>
 
-                    <TextBlock Grid.Column="2" Text="{Binding Time}" Width="65" Background="DarkGray" Foreground="Lime" FontSize="36" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Lucida Sans Typewriter"/>
+                    <TextBlock Grid.Column="2" Text="{Binding Time}" Width="65" Background="DarkGray" Foreground="Lime" FontSize="36" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="Lucida Sans Typewriter" />
                 </Grid>
             </Border>
         </Border>
@@ -47,22 +47,22 @@
                         <ListView ScrollViewer.HorizontalScrollBarVisibility="Disabled" Background="#DFDFDF" ItemsSource="{Binding GameCells}">
                             <ListView.ItemsPanel>
                                 <ItemsPanelTemplate>
-                                    <WrapPanel Orientation="Horizontal" Margin="0"/>
+                                    <WrapPanel Orientation="Horizontal" Margin="0" />
                                 </ItemsPanelTemplate>
                             </ListView.ItemsPanel>
                             <ListView.ItemTemplate>
                                 <DataTemplate>
-                                    <local:GameCellUI IsRevealed="{Binding IsRevealed}" IsFlagged="{Binding IsFlagged}" 
+                                    <local:GameCellUI IsRevealed="{Binding IsRevealed}" IsFlagged="{Binding IsFlagged}"
                                                       HasNumber="{Binding HasNumber}" Command="{Binding LeftClickCommand}"
-                                                      RightCommand="{Binding RightClickCommand}" MineVisible="{Binding MineVisible}" 
-                                                      IsWrong="{Binding IsWrong}" IsMine="{Binding IsMine}"/>
+                                                      RightCommand="{Binding RightClickCommand}" MineVisible="{Binding MineVisible}"
+                                                      IsWrong="{Binding IsWrong}" IsMine="{Binding IsMine}" />
                                 </DataTemplate>
                             </ListView.ItemTemplate>
                             <ListView.ItemContainerStyle>
                                 <Style TargetType="{x:Type ListViewItem}">
-                                    <Setter Property="Margin" Value="0"/>
-                                    <Setter Property="Padding" Value="0"/>
-                                    <Setter Property="BorderThickness" Value="0"/>
+                                    <Setter Property="Margin" Value="0" />
+                                    <Setter Property="Padding" Value="0" />
+                                    <Setter Property="BorderThickness" Value="0" />
                                 </Style>
                             </ListView.ItemContainerStyle>
                         </ListView>

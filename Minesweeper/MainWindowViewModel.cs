@@ -1,6 +1,5 @@
 ﻿using Minesweeper.Game;
 using Minesweeper.Solver;
-using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;

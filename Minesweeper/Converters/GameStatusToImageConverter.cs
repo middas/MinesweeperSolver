@@ -7,9 +7,9 @@ namespace Minesweeper.Converters
 {
     public class GameStatusToImageConverter : IValueConverter
     {
-        private const string Smile = "Resources/Smile.png";
         private const string Frown = "Resources/Frown.png";
         private const string Glasses = "Resources/Glasses.png";
+        private const string Smile = "Resources/Smile.png";
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
