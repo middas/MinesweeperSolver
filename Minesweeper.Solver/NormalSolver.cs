@@ -16,9 +16,12 @@ namespace Minesweeper.Solver
 
                 while (minesweeper.GameStatus != GameStatus.Win && minesweeper.GameStatus != GameStatus.Loss)
                 {
+                    RevealCellsAroundMines(minesweeper);
+
                     if (!MarkMines(minesweeper))
                     {
-                        RevealRandomCell(minesweeper, random);
+                        break;
+                        //RevealRandomCell(minesweeper, random);
                     }
                     else
                     {

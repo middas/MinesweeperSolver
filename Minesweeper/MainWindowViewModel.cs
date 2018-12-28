@@ -155,12 +155,9 @@ namespace Minesweeper
             {
                 c.CellClick += (s, e) =>
                 {
-                    if (GameStatus == GameStatus.New)
-                    {
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
                         StartTimer();
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-                    }
 
                     _minesweeperGame.BoardClick(e.X, e.Y, e.ClickAction);
                 };
@@ -211,19 +208,22 @@ namespace Minesweeper
 
         private async Task StartTimer()
         {
-            _timerCancellationSource = new CancellationTokenSource();
-
-            try
+            if (_minesweeperGame.GameStatus == GameStatus.New)
             {
-                while (true)
-                {
-                    await Task.Delay(1000, _timerCancellationSource.Token);
+                _timerCancellationSource = new CancellationTokenSource();
 
-                    _secondsElapsed++;
-                    Time = _secondsElapsed.ToString("000");
+                try
+                {
+                    while (true)
+                    {
+                        await Task.Delay(1000, _timerCancellationSource.Token);
+
+                        _secondsElapsed++;
+                        Time = _secondsElapsed.ToString("000");
+                    }
                 }
+                catch { }
             }
-            catch { }
         }
 
         private void StopTimer()

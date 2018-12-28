@@ -41,10 +41,12 @@ namespace Minesweeper.Game
             {
                 for (int y = 0; y < Y; y++)
                 {
-                    if (ignoredCell.x != x && ignoredCell.y != y)
+                    if (ignoredCell.x == x && ignoredCell.y == y)
                     {
-                        cells.Add((x, y));
+                        continue;
                     }
+
+                    cells.Add((x, y));
                 }
             }
 
